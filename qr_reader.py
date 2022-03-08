@@ -1,4 +1,4 @@
-import cv2
+from cv2 import cv2
 import numpy as np
 import time
 from pyzbar.pyzbar import decode
@@ -9,11 +9,12 @@ class QRReader:
     def __init__(self):
         self.message = None
 
-    def read(self, active_display=False, image=None):
+    def read(self, active_display=False, display_seconds=30, image=None):
         """
         Reads a QR code from an image or using camera
         Args:
             active_display: boolean on actively displaying QR image with text
+            display_seconds: number of seconds to display QR when active_display
             image: path to qr image file
 
         Returns:
@@ -29,6 +30,7 @@ class QRReader:
             success, img = capture.read()
 
         qr_found = False
+        end_time = time.time() + display_seconds
         # if active_display, continue reading QR and displaying text
         while not qr_found or active_display:
             msg = self.__qr_read(img)
@@ -40,9 +42,13 @@ class QRReader:
 
             # Try QR Reader on an image once
             if image:
-                # Display QR for 10 seconds if a_d
+                # Display QR for input seconds if active_display True
                 if active_display:
-                    time.sleep(10)
+                    time.sleep(display_seconds)
+                break
+
+            # Show QR code reader image for up to display_seconds
+            if time.time() > end_time:
                 break
 
             # Retry video image if QR not found
