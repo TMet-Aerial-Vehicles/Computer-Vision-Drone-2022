@@ -1,5 +1,6 @@
 from qr_reader import QRReader
 from detection import Detection
+from serial_communication import SerialCommunication
 from calculations import intruder_centre_offset, bounding_box_centroid, \
     calculate_intruder_position
 from cv2 import cv2
@@ -85,7 +86,18 @@ def detection(image_path=None, detect_once=False):
             exit_call = True
 
 
-
 if __name__ == "__main__":
     # read_qr()
+
+    # Set up connection with Arduino
+    ser = SerialCommunication()
+
     detection()
+
+    # Possible commands:
+    # init - initialize the Detection class
+    # qr - init and read qr codes
+    # end - end script
+    # detect single/continuously
+    # stop, pause and continue detection
+    #
