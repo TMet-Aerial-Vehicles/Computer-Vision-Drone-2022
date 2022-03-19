@@ -7,6 +7,7 @@ from pyzbar.pyzbar import decode
 class QRReader:
 
     def __init__(self):
+        self.raw_message = None
         self.message = None
 
     def read(self, active_display=False, display_seconds=30, image=None):
@@ -33,12 +34,13 @@ class QRReader:
         end_time = time.time() + display_seconds
         # if active_display, continue reading QR and displaying text
         while not qr_found or active_display:
-            msg = self.__qr_read(img)
+            msg = qr_read(img, display=active_display)
 
             if msg is not None:
                 qr_found = True
-                self.message = msg
-                print(msg)
+                self.raw_message = msg
+                self.message = msg_decoder(msg)
+                print(self.message)
 
             # Try QR Reader on an image once
             if image:
@@ -55,22 +57,24 @@ class QRReader:
             print("Recapturing")
             success, img = capture.read()
 
-    @staticmethod
-    def __qr_read(img):
-        """
-        Uses pyzbar decoder to read img and display QR
-        Args:
-            img: img captured from video with CV2 or referenced image
 
-        Returns:
-            The QR message if found else None
-        """
-        embedded_data = None
-        # Decode(img) is an array of QR data; iterate to find embedded data
-        for qr in decode(img):
-            # Converts embedded data to string format
-            embedded_data = qr.data.decode('utf-8')
+def qr_read(img, display=False):
+    """
+    Uses pyzbar decoder to read img and display QR
+    Args:
+        img: img captured from video with CV2 or referenced image
+        display: Boolean whether to display and draw text on QR
 
+    Returns:
+        The QR message if found else None
+    """
+    embedded_data = None
+    # Decode(img) is an array of QR data; iterate to find embedded data
+    for qr in decode(img):
+        # Converts embedded data to string format
+        embedded_data = qr.data.decode('utf-8')
+
+        if display:
             # Add border detection and overlay text
             border = np.array([qr.polygon], np.int32)
             border = border.reshape((-1, 1, 2))
@@ -79,10 +83,46 @@ class QRReader:
             cv2.polylines(img, [border], True, (255, 0, 255), 8)
             cv2.putText(img, embedded_data,
                         (border_text[0], border_text[1]),
-                         cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
 
+    if display:
         # Display QR found with overlaid border and text
         cv2.imshow('Result', img)
         cv2.waitKey(10)
 
-        return embedded_data
+    return embedded_data
+
+
+def msg_decoder(msg):
+    """Formulate the QR code into a digestible dictionary
+
+    Format:
+    Questions:\n
+    Word word? Word word? Word word?\n
+    Date; Time; device_id; sensor_id; longitude; latitude
+
+    Example Format
+    Questions:
+    Tshirt colour? Hair colour? Item carried?
+    2021-08-18; 16:37; S_Comm1; S02; 49.90440649280493; -98.27393447717382
+
+    """
+    msg_new = msg.splitlines()
+    response = {
+        'questions': msg_new[1].split('?')
+    }
+
+    msg_data = msg_new[2].split(';')
+    response['date'] = msg_data[0].strip()
+    response['time'] = msg_data[1].strip()
+    response['device_id'] = msg_data[2].strip()
+    response['sensor_id'] = msg_data[3].strip()
+
+    # response['longitude'] = int(msg_data[4].strip())
+    # response['latitude'] = int(msg_data[5].strip())
+
+    # Temp Fix, CONOPS uses ',' between long and lat,
+    response['longitude'] = float(msg_data[4].split(',')[0].strip())
+    response['latitude'] = float(msg_data[4].split(',')[1].strip())
+
+    return response
