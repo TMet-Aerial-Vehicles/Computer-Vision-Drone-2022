@@ -67,6 +67,7 @@ def qr_read(img, active_display, display_time):
     for qr in decode(img):
         # Converts embedded data to string format
         embedded_data = qr.data.decode('utf-8')
+        print(embedded_data)
 
         # Set up QR border for all QR detected
         if active_display:
@@ -113,11 +114,7 @@ def msg_decoder(msg):
     response['device_id'] = msg_data[2].strip()
     response['sensor_id'] = msg_data[3].strip()
 
-    # response['longitude'] = int(msg_data[4].strip())
-    # response['latitude'] = int(msg_data[5].strip())
-
-    # Temp Fix, CONOPS uses ',' between long and lat,
-    response['longitude'] = float(msg_data[4].split(',')[0].strip())
-    response['latitude'] = float(msg_data[4].split(',')[1].strip())
+    response['longitude'] = float(msg_data[4].strip())
+    response['latitude'] = float(msg_data[5].strip())
 
     return response
