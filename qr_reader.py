@@ -10,7 +10,7 @@ class QRReader:
         self.raw_message = None
         self.message = None
 
-    def read(self, active_display=False, display_seconds=30, image=None):
+    def read(self, active_display=False, display_seconds=10, image=None):
         """
         Reads a QR code from an image or using camera
         Args:
@@ -25,16 +25,16 @@ class QRReader:
             capture = None
             img = cv2.imread(image)
         else:
+            display_seconds = 0.1
             capture = cv2.VideoCapture(0)
             capture.set(3, 640)
             capture.set(4, 480)
             success, img = capture.read()
 
-        qr_found = False
-        end_time = time.time() + display_seconds
         # if active_display, continue reading QR and displaying text
+        qr_found = False
         while not qr_found or active_display:
-            msg = qr_read(img, display=active_display)
+            msg = qr_read(img, active_display, display_seconds)
 
             if msg is not None:
                 qr_found = True
@@ -44,13 +44,6 @@ class QRReader:
 
             # Try QR Reader on an image once
             if image:
-                # Display QR for input seconds if active_display True
-                if active_display:
-                    time.sleep(display_seconds)
-                break
-
-            # Show QR code reader image for up to display_seconds
-            if time.time() > end_time:
                 break
 
             # Retry video image if QR not found
@@ -58,12 +51,13 @@ class QRReader:
             success, img = capture.read()
 
 
-def qr_read(img, display=False):
+def qr_read(img, active_display, display_time):
     """
     Uses pyzbar decoder to read img and display QR
     Args:
         img: img captured from video with CV2 or referenced image
-        display: Boolean whether to display and draw text on QR
+        active_display: Boolean whether to display and draw text on QR
+        display_time: time (seconds) to display QR for
 
     Returns:
         The QR message if found else None
@@ -74,7 +68,8 @@ def qr_read(img, display=False):
         # Converts embedded data to string format
         embedded_data = qr.data.decode('utf-8')
 
-        if display:
+        # Set up QR border for all QR detected
+        if active_display:
             # Add border detection and overlay text
             border = np.array([qr.polygon], np.int32)
             border = border.reshape((-1, 1, 2))
@@ -85,10 +80,10 @@ def qr_read(img, display=False):
                         (border_text[0], border_text[1]),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
 
-    if display:
+    if active_display:
         # Display QR found with overlaid border and text
         cv2.imshow('Result', img)
-        cv2.waitKey(10)
+        cv2.waitKey(display_time * 1000)
 
     return embedded_data
 
