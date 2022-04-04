@@ -78,8 +78,7 @@ if __name__ == "__main__":
         if camera.isOpened():
             time.sleep(1)
         else:
-            raise Exception
-            # raise ConnectionError
+            raise IOError("Unable to open webcam")
     except:
         print("Unable to open camera capture")
         sys.exit(1)
