@@ -34,7 +34,7 @@ class PixHawk:
 
         if min_altitude < max_altitude:
             self.min_altitude = min_altitude
-            self.altitude = min_altitude + 5
+            self.altitude = min_altitude + 2
             self.max_altitude = max_altitude
         else:
             print("Altitude levels incorrectly set")
@@ -153,11 +153,25 @@ class PixHawk:
         new_loc = LocationGlobal(latitude, longitude)
         self.vehicle.simple_goto(new_loc)
 
+    def move_relative(self, m_north, m_east):
+        earth_radius=6378137.0  # Radius of "spherical" earth
+        current_lat = self.vehicle.location.global_frame.lat
+        current_long = self.vehicle.location.global_frame.lon
+
+        new_lat = m_north/earth_radius
+        new_long = m_east/(earth_radius*math.cos(math.pi * current_lat/180))
+
+        new_loc = LocationGlobalRelative(new_lat, new_long)
+        self.vehicle.simple_goto(new_loc)
+
     def change_altitude(self):
         pass
 
     def land(self):
         self.vehicle.mode = VehicleMode("LAND")
+
+    def close_connection(self):
+        self.vehicle.close()
 
 
 def get_distance_metres(loc_1_long, loc_1_lat, loc_2_long, loc_2_lat):
