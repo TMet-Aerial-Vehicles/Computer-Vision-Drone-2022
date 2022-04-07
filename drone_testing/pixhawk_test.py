@@ -20,6 +20,7 @@ while count < 5:
     print(f"Mode: {vehicle.mode.name}")
     print(f"Armed: {vehicle.armed}")
     print("EKF Ok: {vehicle.ekf_ok}")
+    time.sleep(1)
     count += 1
 
 
