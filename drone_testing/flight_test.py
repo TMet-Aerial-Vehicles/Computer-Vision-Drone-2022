@@ -1,6 +1,7 @@
 from pixhawk import PixHawk
 from time import sleep
 
+sleep(30)
 
 pixhawk = PixHawk(min_altitude=2, max_altitude=10,
                   boundary_circle=True, boundary_radius=10)
