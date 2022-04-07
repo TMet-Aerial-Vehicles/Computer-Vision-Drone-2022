@@ -8,7 +8,7 @@ class PixHawk:
 
     def __init__(self, connection_port="/dev/ttyACM0", baud_rate=115200,
                  min_altitude=30, max_altitude=50,
-                 boundary_circle=True, boundary_radius=10,
+                 boundary_circle=True, boundary_radius=1000,
                  boundary_square=None,
                  home_longitude=None, home_latitude=None):
         """
@@ -118,8 +118,9 @@ class PixHawk:
             else:
                 return False
         else:
-            # Square boundary
-            # TODO: Implement square boundary check
+            # Given square boundaries list, check current position is within
+            # 4 coordinates
+
             return True
 
     def set_home_position(self):
@@ -155,6 +156,9 @@ class PixHawk:
     def change_altitude(self):
         pass
 
+    def land(self):
+        self.vehicle.mode = VehicleMode("LAND")
+
 
 def get_distance_metres(loc_1_long, loc_1_lat, loc_2_long, loc_2_lat):
     """
@@ -174,3 +178,26 @@ def get_distance_metres(loc_1_long, loc_1_lat, loc_2_long, loc_2_lat):
     delta_lat = loc_2_lat - loc_1_lat
     delta_long = loc_2_long - loc_1_long
     return math.sqrt((delta_lat ** 2) + (delta_long ** 2)) * 1.113195e5
+
+
+def check_within_square(lst_lat_long, curr_lat, curr_long):
+    # 4 coordinates of (lat, long)
+    # Assume square box
+    # x1,y1       x2,y2
+    #
+    #
+    # x3,y3       x4,y4
+    long_lst = []
+    lat_lst = []
+    for coord in lst_lat_long:
+        lat_lst.append(coord[0])
+        long_lst.append(coord[1])
+
+    # Get min max of each to get bounds of boundary
+    lat_min = min(lat_lst)
+    lat_max = max(lat_lst)
+    long_min = min(long_lst)
+    long_max = max(long_lst)
+
+    # TODO: Compare current position to bounds
+
