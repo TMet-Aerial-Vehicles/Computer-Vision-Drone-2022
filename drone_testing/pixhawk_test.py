@@ -6,18 +6,21 @@ baud_rate = 115200
 
 vehicle = connect(port, baud=baud_rate, wait_ready=True)
 
-vehicle.wait_ready('autopilot_version')
-print(f"Autopilot version: {vehicle.version}")
-print(f"Supports set attitude from companion: {vehicle.capabilities.set_attitude_target_local_ned}")
-print(f"Position: {vehicle.location.global_relative_frame}")
-print(f"Attitude: {vehicle.attitude}")
-print(f"Velocity: {vehicle.velocity}")
-print(f"Last Heartbeat: {vehicle.last_heartbeat}")
-print(f"Is the vehicle armable: {vehicle.is_armable}")
-print(f"Groundspeed: {vehicle.groundspeed}")
-print(f"Mode: {vehicle.mode.name}")
-print(f"Armed: {vehicle.armed}")
-print("EKF Ok: {vehicle.ekf_ok}")
+count = 0
+while count < 5:
+    vehicle.wait_ready('autopilot_version')
+    print(f"Autopilot version: {vehicle.version}")
+    print(f"Supports set attitude from companion: {vehicle.capabilities.set_attitude_target_local_ned}")
+    print(f"Position: {vehicle.location.global_relative_frame}")
+    print(f"Attitude: {vehicle.attitude}")
+    print(f"Velocity: {vehicle.velocity}")
+    print(f"Last Heartbeat: {vehicle.last_heartbeat}")
+    print(f"Is the vehicle armable: {vehicle.is_armable}")
+    print(f"Groundspeed: {vehicle.groundspeed}")
+    print(f"Mode: {vehicle.mode.name}")
+    print(f"Armed: {vehicle.armed}")
+    print("EKF Ok: {vehicle.ekf_ok}")
+    count += 1
 
 
 def arm_and_takeoff(tgt_altitude):
@@ -46,7 +49,7 @@ def arm_and_takeoff(tgt_altitude):
 
 
 #------ MAIN PROGRAM ----
-# arm_and_takeoff(10)
+# arm_and_takeoff(0.5)
 #
 # #-- set the default speed
 # vehicle.airspeed = 7
@@ -63,7 +66,7 @@ def arm_and_takeoff(tgt_altitude):
 # print("Coming back")
 # vehicle.mode = VehicleMode("RTL")
 
-time.sleep(20)
+time.sleep(10)
 
 #-- Close connection
 vehicle.close()
