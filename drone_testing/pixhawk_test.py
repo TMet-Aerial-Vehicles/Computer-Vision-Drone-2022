@@ -46,22 +46,22 @@ def arm_and_takeoff(tgt_altitude):
 
 
 #------ MAIN PROGRAM ----
-arm_and_takeoff(10)
-
-#-- set the default speed
-vehicle.airspeed = 7
-
-#-- Go to position
-print ("Moving to Position 1")
-wp1 = LocationGlobalRelative(35.9872609, -95.8753037, 10)
-
-vehicle.simple_goto(wp1)
-
-time.sleep(30)
-
-#--- Coming back
-print("Coming back")
-vehicle.mode = VehicleMode("RTL")
+# arm_and_takeoff(10)
+#
+# #-- set the default speed
+# vehicle.airspeed = 7
+#
+# #-- Go to position
+# print ("Moving to Position 1")
+# wp1 = LocationGlobalRelative(35.9872609, -95.8753037, 10)
+#
+# vehicle.simple_goto(wp1)
+#
+# time.sleep(30)
+#
+# #--- Coming back
+# print("Coming back")
+# vehicle.mode = VehicleMode("RTL")
 
 time.sleep(20)
 

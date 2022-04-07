@@ -3,7 +3,8 @@
 
 __pycache__/
 
-testing/
+testing
+logging/
 
 dji-sdk-python/
 

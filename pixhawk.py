@@ -1,7 +1,11 @@
-from dronekit import connect, VehicleMode, LocationGlobalRelative, LocationGlobal
-import serial
+from dronekit import connect, VehicleMode, LocationGlobalRelative, \
+    LocationGlobal
 import time
 import math
+
+import logging
+from logging_script import start_logging
+start_logging()
 
 
 class PixHawk:
@@ -37,17 +41,17 @@ class PixHawk:
             self.altitude = min_altitude + 2
             self.max_altitude = max_altitude
         else:
-            print("Altitude levels incorrectly set")
+            logging.info("Altitude levels incorrectly set")
             raise ValueError
 
         self.boundary_circle = boundary_circle
         self.boundary_radius = boundary_radius
         self.boundary_square = boundary_square
 
-        print("Connecting to drone")
+        logging.info("Connecting to drone")
         self.vehicle = connect(connection_port, baud=baud_rate, wait_ready=True)
 
-        print("Downloading commands")
+        logging.info("Downloading commands")
         self.commands = self.vehicle.commands
         self.commands.download()
         self.commands.wait_ready()
@@ -60,17 +64,17 @@ class PixHawk:
         self.original_latitude = self.vehicle.location.global_frame.lat
 
         while not self.vehicle.is_armable:
-            print("Waiting for drone to initialize...")
+            logging.info("Waiting for drone to initialize...")
             time.sleep(1)
 
     def set_guided_mode(self):
-        print("Arming motors")
+        logging.info("Arming motors")
         # Copter should arm in GUIDED mode
         self.vehicle.mode = VehicleMode("GUIDED")
         self.vehicle.armed = True
 
         while not self.vehicle.armed:
-            print("Waiting for arming...")
+            logging.info("Waiting for arming...")
             time.sleep(1)
 
         while self.vehicle.mode != VehicleMode("GUIDED"):
@@ -79,23 +83,23 @@ class PixHawk:
 
     def takeoff(self):
         if not self.check_within_boundaries():
-            print("Unable to takeoff, check boundary conditions")
+            logging.info("Unable to takeoff, check boundary conditions")
             return
 
         # Confirm ready to take off
         while not self.vehicle.armed:
-            print("Waiting for arming...")
+            logging.info("Waiting for arming...")
             time.sleep(1)
 
-        print("Taking Off")
+        logging.info("Taking Off")
         self.vehicle.simple_takeoff(self.altitude)
 
         while True:
             alt = self.vehicle.location.global_relative_frame.alt
-            print(f"Current Altitude: {alt}")
+            logging.info(f"Current Altitude: {alt}")
             # if alt >= self.altitude - 1.0:
             if alt >= self.altitude * 0.95:
-                print("Reached target altitude")
+                logging.info("Reached target altitude")
                 break
             time.sleep(1)
 
@@ -128,19 +132,19 @@ class PixHawk:
         # Need to re-download the Vehicle.commands to confirm the value.
         # Get Vehicle Home location is `None` until first set by autopilot
         while not self.vehicle.home_location:
-            cmds = self.vehicle.commands
-            cmds.download()
-            cmds.wait_ready()
+            commands = self.vehicle.commands
+            commands.download()
+            commands.wait_ready()
             if not self.vehicle.home_location:
-                print("Waiting for home location...")
+                logging.info("Waiting for home location...")
 
         # We have a home location.
-        print(f"Current Home position: {self.vehicle.home_location}")
+        logging.info(f"Current Home position: {self.vehicle.home_location}")
 
-        print("Setting Home position")
+        logging.info("Setting Home position")
         self.vehicle.home_location = self.vehicle.location.global_frame
 
-        print(f"New Home Location: {self.vehicle.home_location}")
+        logging.info(f"New Home Location: {self.vehicle.home_location}")
 
     def return_home(self):
         self.vehicle.mode = VehicleMode("RTL")
@@ -149,17 +153,18 @@ class PixHawk:
         pass
 
     def move(self, latitude, longitude):
-        print(f"Moving to latitude: {latitude}, longitude: {longitude}")
+        logging.info(f"Moving to latitude: {latitude}, longitude: {longitude}")
         new_loc = LocationGlobal(latitude, longitude)
         self.vehicle.simple_goto(new_loc)
 
     def move_relative(self, m_north, m_east):
-        earth_radius=6378137.0  # Radius of "spherical" earth
+        earth_radius = 6378137.0  # Radius of "spherical" earth
         current_lat = self.vehicle.location.global_frame.lat
-        current_long = self.vehicle.location.global_frame.lon
+        # current_long = self.vehicle.location.global_frame.lon
 
-        new_lat = m_north/earth_radius
-        new_long = m_east/(earth_radius*math.cos(math.pi * current_lat/180))
+        new_lat = m_north / earth_radius
+        new_long = m_east / (earth_radius *
+                             math.cos(math.pi * current_lat / 180))
 
         new_loc = LocationGlobalRelative(new_lat, new_long)
         self.vehicle.simple_goto(new_loc)

@@ -7,6 +7,10 @@ from calculations import intruder_centre_offset, bounding_box_centroid, \
     calculate_intruder_position
 from cv2 import cv2
 from datetime import datetime
+
+import logging
+from logging_script import start_logging
+start_logging()
 # Main Python script
 
 
@@ -47,11 +51,11 @@ def detection(image_path=None, detect_once=False):
         else:
             # Determine centroid of bounding box
             x_centre, y_centre = bounding_box_centroid(bounding_boxes[0])
-            print(f"Image Size: {frame.shape}")
+            logging.info(f"Image Size: {frame.shape}")
             x_offset, y_offset = intruder_centre_offset(frame.shape[1],
                                                         frame.shape[0],
                                                         x_centre, y_centre)
-            print(f"{datetime.now()}: Offset ({x_offset}, {y_offset})")
+            logging.info(f"{datetime.now()}: Offset ({x_offset}, {y_offset})")
 
             # Save offset to file?
             pass
@@ -80,7 +84,7 @@ if __name__ == "__main__":
         else:
             raise IOError("Unable to open webcam")
     except:
-        print("Unable to open camera capture")
+        logging.info("Unable to open camera capture")
         sys.exit(1)
 
     # Boot ports
@@ -98,11 +102,11 @@ if __name__ == "__main__":
 
     # Read QR and coordinates
     if qrr.message:
-        print(qrr.message)
+        logging.info(qrr.message)
         longitude = qrr.message.longitude
         latitude = qrr.message.latitude
     else:
-        print("Unable to detect QR")
+        logging.info("Unable to detect QR")
         sys.exit()
 
     # Send Coordinates to PixHawk loaded with ArduPilot
