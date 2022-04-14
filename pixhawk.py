@@ -155,6 +155,9 @@ class PixHawk:
     def set_loiter_mode(self):
         pass
 
+    def set_stabilize_mode(self):
+        self.vehicle.mode = VehicleMode("RTL")
+
     def move(self, latitude, longitude):
         logging.info(f"Moving to latitude: {latitude}, longitude: {longitude}")
         new_loc = LocationGlobal(latitude, longitude)
