@@ -1,3 +1,5 @@
+import sys
+sys.path.append("..")
 from pixhawk import PixHawk
 from sound import countdown
 from time import sleep

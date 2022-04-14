@@ -10,6 +10,6 @@ def start_logging(testing_directory=False):
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.DEBUG)
     handler = logging.FileHandler(file, 'w', 'utf-8')
-    handler.setFormatter(
-        logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
     root_logger.addHandler(handler)

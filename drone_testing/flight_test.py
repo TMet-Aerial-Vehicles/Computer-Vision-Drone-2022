@@ -1,3 +1,5 @@
+import sys
+sys.path.append("..")
 from pixhawk import PixHawk
 from time import sleep
 
