@@ -10,7 +10,7 @@ def start_logging():
         directory = '/home/pi/Desktop/JTC_ComputerVision/'
     else:
         directory = ''
-    file = f"{directory}logging-{datetime.today().strftime('%Y-%m-%d-%H')}.log"
+    file = f"{directory}logging/logging-{datetime.today().strftime('%Y-%m-%d-%H')}.log"
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.DEBUG)
     handler = logging.FileHandler(file, 'a', 'utf-8')
