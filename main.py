@@ -5,6 +5,7 @@ from detection import Detection
 # from serial_communication import SerialCommunication
 from calculations import intruder_centre_offset, bounding_box_centroid, \
     calculate_intruder_position
+from sound import countdown
 from cv2 import cv2
 from datetime import datetime
 
@@ -113,7 +114,7 @@ if __name__ == "__main__":
     # Figure out connection to send data
 
     # 20 sec countdown,
-    time.sleep(20)
+    countdown(20)
 
     # Fly to position
 
