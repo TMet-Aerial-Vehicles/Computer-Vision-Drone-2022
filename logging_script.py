@@ -13,7 +13,7 @@ def start_logging():
     file = f"{directory}logging-{datetime.today().strftime('%Y-%m-%d-%H')}.log"
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.DEBUG)
-    handler = logging.FileHandler(file, 'w', 'utf-8')
+    handler = logging.FileHandler(file, 'a', 'utf-8')
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
     root_logger.addHandler(handler)
