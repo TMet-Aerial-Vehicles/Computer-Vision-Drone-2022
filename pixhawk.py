@@ -184,6 +184,17 @@ class PixHawk:
     def close_connection(self):
         self.vehicle.close()
 
+    def print_drone_stats(self):
+        print(f"Position: {self.vehicle.location.global_relative_frame}")
+        print(f"Attitude: {self.vehicle.attitude}")
+        print(f"Velocity: {self.vehicle.velocity}")
+        print(f"Last Heartbeat: {self.vehicle.last_heartbeat}")
+        print(f"Is the vehicle armable: {self.vehicle.is_armable}")
+        print(f"Groundspeed: {self.vehicle.groundspeed}")
+        print(f"Mode: {self.vehicle.mode.name}")
+        print(f"Armed: {self.vehicle.armed}")
+        print("EKF Ok: {vehicle.ekf_ok}")
+
 
 def get_distance_metres(loc_1_long, loc_1_lat, loc_2_long, loc_2_lat):
     """
