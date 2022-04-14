@@ -3,7 +3,7 @@ from sound import countdown
 from time import sleep
 import logging
 from logging_script import start_logging
-start_logging()
+start_logging(testing_directory=True)
 
 logging.info("Starting 20 second countdown")
 countdown(20)
