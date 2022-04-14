@@ -10,7 +10,7 @@ countdown(20)
 drone = None
 try:
     logging.info("Connecting to drone")
-    drone = PixHawk(min_altitude=2, max_altitude=10,
+    drone = PixHawk(min_altitude=3, max_altitude=10,
                     boundary_circle=True, boundary_radius=10)
 
     logging.info("Countdown 5 second")
@@ -56,7 +56,7 @@ try:
     sleep(2)
 
     logging.info("Moving 1m North")
-    drone.move_relative(1, 0)
+    drone.move_relative(3, 0)
     sleep(2)
 
     logging.info("Rotate 90 degree")
@@ -64,7 +64,7 @@ try:
     sleep(2)
 
     logging.info("Moving 1m East")
-    drone.move_relative(0, 1)
+    drone.move_relative(0, 3)
     sleep(2)
 
     logging.info("Rotate 90 degree")
@@ -72,7 +72,7 @@ try:
     sleep(2)
 
     logging.info("Moving 1m South")
-    drone.move_relative(-1, 0)
+    drone.move_relative(-3, 0)
     sleep(2)
 
     logging.info("Rotate 90 degree")
