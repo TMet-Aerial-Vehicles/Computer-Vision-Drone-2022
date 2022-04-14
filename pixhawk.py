@@ -149,6 +149,9 @@ class PixHawk:
     def return_home(self):
         self.vehicle.mode = VehicleMode("RTL")
 
+    def rotate(self, degrees, relative=True):
+        self.vehicle.condition_yaw(degrees, relative)
+
     def set_loiter_mode(self):
         pass
 
