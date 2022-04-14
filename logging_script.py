@@ -3,10 +3,8 @@ from datetime import datetime
 
 
 # noinspection PyArgumentList
-def start_logging(testing_directory=False):
-    file = f"logging/logging-{datetime.today().strftime('%Y-%m-%d-%H')}.log"
-    if testing_directory:
-        file = "../" + file
+def start_logging(dir='logging/'):
+    file = f"{dir}logging-{datetime.today().strftime('%Y-%m-%d-%H')}.log"
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.DEBUG)
     handler = logging.FileHandler(file, 'w', 'utf-8')
