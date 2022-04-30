@@ -25,18 +25,7 @@ logging.info("================================================================")
 # Get argument first
 nnPath = str((Path(__file__).parent / Path('models/tiny-yolo-v4_openvino_2021.2_6shave.blob')).resolve().absolute())
 print(nnPath)
-if 1 < len(sys.argv):
-    # arg = sys.argv[1]
-    arg = "yolo4"
-    if arg == "yolo3":
-        nnPath = str((Path(__file__).parent / Path('../models/yolo-v3-tiny-tf_openvino_2021.4_6shave.blob')).resolve().absolute())
-    elif arg == "yolo4":
-        nnPath = str((Path(__file__).parent / Path('../models/yolo-v4-tiny-tf_openvino_2021.4_6shave.blob')).resolve().absolute())
-    else:
-        nnPath = arg
-else:
-    print("Using Tiny YoloV4 model. If you wish to use Tiny YOLOv3, call 'tiny_yolo.py yolo3'")
-print(nnPath)
+
 if not Path(nnPath).exists():
     import sys
     logging.info(f'Required file/s not found, please run "{sys.executable} install_requirements.py"')
