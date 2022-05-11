@@ -156,7 +156,7 @@ class PixHawk:
         pass
 
     def set_stabilize_mode(self):
-        self.vehicle.mode = VehicleMode("RTL")
+        self.vehicle.mode = VehicleMode("STABILIZE")
 
     def move(self, latitude, longitude):
         logging.info(f"Moving to latitude: {latitude}, longitude: {longitude}")
