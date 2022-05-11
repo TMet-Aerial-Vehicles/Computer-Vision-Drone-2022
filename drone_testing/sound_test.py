@@ -29,3 +29,6 @@ play_obj = wave_obj.play()
 sleep(1)
 play_obj.wait_done()
 
+from sound import play_quick_sound
+play_quick_sound(5)
+
