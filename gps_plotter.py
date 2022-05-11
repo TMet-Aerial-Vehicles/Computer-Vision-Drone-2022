@@ -5,6 +5,7 @@ from PIL import Image, ImageDraw
 
 # Adopted from https://github.com/tisljaricleo/GPS-visualization-Python
 
+
 class GPSVis(object):
     """
         Class for GPS data visualization using pre-downloaded OSM map in image format.
