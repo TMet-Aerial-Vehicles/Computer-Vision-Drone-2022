@@ -20,7 +20,7 @@ try:
 
     logging.info("Taking off")
     drone.takeoff()
-    logging.info("Took off to 2m")
+    logging.info("Took off to 5m")
 
     logging.info("Rotating to North")
     drone.rotate(0, relative=False)
@@ -57,7 +57,7 @@ try:
     drone.rotate(359)
     sleep(2)
 
-    logging.info("Moving 1m North")
+    logging.info("Moving 3m North")
     drone.move_relative(3, 0)
     sleep(2)
 
@@ -65,7 +65,7 @@ try:
     drone.rotate(90)
     sleep(2)
 
-    logging.info("Moving 1m East")
+    logging.info("Moving 3m East")
     drone.move_relative(0, 3)
     sleep(2)
 
@@ -73,7 +73,7 @@ try:
     drone.rotate(90)
     sleep(2)
 
-    logging.info("Moving 1m South")
+    logging.info("Moving 3m South")
     drone.move_relative(-3, 0)
     sleep(2)
 
