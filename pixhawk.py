@@ -175,8 +175,13 @@ class PixHawk:
         new_loc = LocationGlobalRelative(new_lat, new_long)
         self.vehicle.simple_goto(new_loc)
 
-    def change_altitude(self):
-        pass
+    def change_altitude(self, new_altitude):
+        current_lat = self.vehicle.location.global_frame.lat
+        current_long = self.vehicle.location.global_frame.lon
+        new_loc_alt = LocationGlobal(current_lat, current_long, new_altitude)
+        logging.info(f"Changing altitude from {self.vehicle.attitude} to "
+                     f"{new_altitude}")
+        self.vehicle.simple_goto(new_loc_alt)
 
     def land(self):
         self.vehicle.mode = VehicleMode("LAND")
@@ -194,6 +199,17 @@ class PixHawk:
         print(f"Mode: {self.vehicle.mode.name}")
         print(f"Armed: {self.vehicle.armed}")
         print("EKF Ok: {vehicle.ekf_ok}")
+
+    def log_drone_stats(self):
+        logging.info(f"Position: {self.vehicle.location.global_relative_frame}")
+        logging.info(f"Attitude: {self.vehicle.attitude}")
+        logging.info(f"Velocity: {self.vehicle.velocity}")
+        logging.info(f"Last Heartbeat: {self.vehicle.last_heartbeat}")
+        logging.info(f"Is the vehicle armable: {self.vehicle.is_armable}")
+        logging.info(f"Groundspeed: {self.vehicle.groundspeed}")
+        logging.info(f"Mode: {self.vehicle.mode.name}")
+        logging.info(f"Armed: {self.vehicle.armed}")
+        logging.info("EKF Ok: {vehicle.ekf_ok}")
 
 
 def get_distance_metres(loc_1_long, loc_1_lat, loc_2_long, loc_2_lat):
