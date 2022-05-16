@@ -23,7 +23,8 @@ logging.info(f"======= {datetime.today().strftime('%Y-%m-%d-%H-%M-%S')} ======")
 logging.info("================================================================")
 
 # Get argument first
-nnPath = str((Path(__file__).parent / Path('models/tiny-yolo-v4_openvino_2021.2_6shave.blob')).resolve().absolute())
+nnPath = str((Path(__file__).parent / Path(
+    '../models/tiny-yolo-v4_openvino_2021.2_6shave.blob')).resolve().absolute())
 print(nnPath)
 
 if not Path(nnPath).exists():

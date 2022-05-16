@@ -51,7 +51,7 @@ class GPSVis(object):
         :param width: Width of the drawn GPS records.
         :return:
         """
-        df = pd.read_csv('test1.csv', sep=',')
+        df = pd.read_csv('../test1.csv', sep=',')
         data = df[['Lat', 'Lng']]
         data = data.rename({'Lat': 'LATITUDE', 'Lng': 'LONGITUDE'}, axis=1)
 
@@ -102,7 +102,7 @@ class GPSVis(object):
 # Two coordinates of the map (upper left, lower right)
 points = (43.70014, -79.26330, 43.69440, -79.25161)
 vis = GPSVis(data_path='path.csv',
-             map_path='map.png',
+             map_path='../map.png',
              points=points)
 
 vis.create_image(color=(0, 0, 255), width=3)

@@ -1,10 +1,9 @@
 import time
 import sys
-from qr_reader import QRReader
+from qr.qr_reader import QRReader
 from detection import Detection
 # from serial_communication import SerialCommunication
-from calculations import intruder_centre_offset, bounding_box_centroid, \
-    calculate_intruder_position
+from calculations import intruder_centre_offset, bounding_box_centroid
 from sound import countdown
 from cv2 import cv2
 from datetime import datetime
