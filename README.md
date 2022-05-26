@@ -31,6 +31,27 @@ latitude position, and then starts its person detection:
 python main.py
 ```
 
+## Creating a Script
+
+* Important imports:
+  * For standardized logging across different scripts:
+  ```python
+  import logging
+  from logging_script import start_logging
+  start_logging()
+  ```
+  * For drone control and connection:
+  ```python
+  from pixhawk import Pixhawk
+  ```
+  * For sound notifications:
+  ```python
+  from sound import countdown, play_quick_sound
+  ```
+For method utilization, see main.py and backup.py
+  
+
+
 ## Authors
 
 * [Craig Pinto](https://github.com/CraigP17)  
@@ -58,10 +79,11 @@ python main.py
 * sounds/
 * venv/
 * videos/
+* backup.py: Contains QR reading, drone flight, and video recording
 * calculations.py: Methods for calculating position
 * logging_script: Logging method to standardize logging to the same file
 * detection.py: Detection class using HOG
-* main.py: Encapsulates entire sequence with reading QR, controlling drone, person detection
+* main.py: Encapsulates entire sequence with reading QR, controlling drone, person detection (Incomplete)
 * pixhawk.py: Pixhawk class with methods to control drone flight
 * requirements.txt: Package dependencies
 * serial_communication: Serial Port communication to Arduino
